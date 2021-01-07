@@ -40,4 +40,4 @@ struct Account{
 void start(int & o);
 void createAccount(std::fstream &);
 void change();
-
+void print_all();

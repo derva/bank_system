@@ -2,9 +2,9 @@
 #include <unistd.h>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 #include "functions.hpp"
 
 int main() {
@@ -40,56 +40,61 @@ int main() {
           //     database>>money;
           //     database>>id;
           //     database>>id;
-          //     std::cout <<"INFO: " << "Name: " <<  first_name << " " << last_name << " $"  << money<<" ID: " << id << std::endl;
+          //     std::cout <<"INFO: " << "Name: " <<  first_name << " " <<
+          //     last_name << " $"  << money<<" ID: " << id << std::endl;
           //     count++;
           //     if (count == 2) {
-          //       throw std::string{"There is more than one users with that ID"};
+          //       throw std::string{"There is more than one users with that
+          //       ID"};
           //     }
           //     database.open("database.txt", std::ios::app);
           //     std::cout << "Enter money balance: ";
           //     std::string new_money;
           //     std::cin >> new_money;
-          //     database <<"Name: " << first_name << " " << last_name << "\tMoney: " << new_money <<"\tID " << id <<std::endl;
+          //     database <<"Name: " << first_name << " " << last_name <<
+          //     "\tMoney: " << new_money <<"\tID " << id <<std::endl;
           //     database.close();
           //   }
           // }
           // if (count == 0) {
           //   throw std::string{"There is no user with that data"};
-          // } 
+          // }
           // // else {
           // //   with_depo_amount(database);
           // // }
           // database.close();
           break;
         }
-        case 5: {
+        case 3: {
           std::ofstream database("database.txt");
           std::cout << "You are deleted all Your data" << std::endl;
           break;
         }
-        case 6: {
-          database.open("database.txt", std::ios::in);
-          if (database.is_open()) {
-            std::string temp;
-            while (std::getline(database, temp)) {
-              std::cout << temp << std::endl;
-              usleep(24000);
-            }
-          }
-          database.close();
+        case 4: {
+          print_all();
+          // database.open("database.txt", std::ios::in);
+          // if (database.is_open()) {
+          //   std::string temp;
+          //   while (std::getline(database, temp)) {
+          //     std::cout << temp << std::endl;
+          //     usleep(24000);
+          //   }
+          // }
+          // database.close();
           break;
         }
-        case 7: {
+        case 5: {
           std::cout << "Closing program..." << std::endl;
+          usleep(5000);
           return 0;
           break;
         }
         default: {
-          throw std::string{"Invalid input"};
+          throw std::string{"Invalid input, please enter number between <1 - 5>"};
           break;
         }
       }
-      std::cout << "\nIf you want to continue enter Your next option <1 - 7>: ";
+      std::cout << "\nIf you want to continue enter Your next option <1 - 5>: ";
       std::cin >> option;
       // }while(option > 0 && option < 8);
     } while (true);
