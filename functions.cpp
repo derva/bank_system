@@ -24,105 +24,125 @@ void start(int& o) {
   std::cout << "OPTIONS: " << std::endl;
   std::cout << "\t1. CREATE NEW ACCOUNT "
             << "\n\t2. EDIT USER INFO "
-            << "\n\t3. DELETE ALL USERS"
-            << "\n\t4. PRINT ALL USERS "
-            << "\n\t5. CLOSE" << std::endl;
+            << "\n\t3. PRINT ALL USERS "
+            << "\n\t4. DELETE ALL USERS"
+            << "\n\t5. PRINT INFO"
+            << "\n\t6. CLOSE PROGRAM" << std::endl;
   std::cout << "Select Your option <1 - 6>: ";
   std::cin >> o;
 }
 
-void createAccount(std::fstream& database) {
-  Account newAcc;
+void createAccount() {
+  std::fstream database;
   std::string f_name;
   std::string l_name;
   std::cout << "*CREATE NEW ACCOUNT*\nEnter First Name: " << std::endl;
   std::cin.clear();
   std::cin.ignore();
   std::getline(std::cin, f_name);
-  // newAcc.set_FName(f_name);
+  std::string temp;
+  database.open("database.txt", std::ios::in);
+  while(database >> temp){
+    if(temp == f_name){
+      std::string e{"User with  already exist in our base!"};
+      throw e;
+    }
+  }
+  database.close();
   std::cout << "Enter Last Name: " << std::endl;
-  // std::cin.clear();
-  // std::cin.ignore();
+  std::cin.clear();
   std::getline(std::cin, l_name);
-  // newAcc.set_LName(l_name);
-  std::cout << "Enter Money Balance: " << std::endl;
+  std::cout << "Enter Money Balance: ($)" << std::endl;
+  std::cin.clear();
   double money;
   std::cin >> money;
   if (!(std::cin) || money < 0){
     throw std::string{"Invalid input - money must be positive number"};
   }
-  // newAcc.set_money(money);
   std::cout << "Enter ID for user: " << std::endl;
   int id;
   std::cin >> id;
   if (!(std::cin) || id < 0) {
     throw std::string{"Invalid input"};
   }
-  newAcc.set_id(id);
-  std::cin.clear();
   std::cin.ignore();
   std::cout << "You are successful enter new user in our base!" << std::endl;
-  database << f_name << " " << l_name << " " << money << " " << id << std::endl;
-  // return newAcc;
+  database.open("database.txt", std::ios::app);
+  database << f_name << std::endl << l_name << std::endl << money << std::endl << id << std::endl;
+  database.close();
 }
 
 void change() {
   std::fstream temp_base, database;
   database.open("database.txt", std::ios::in);
   temp_base.open("database2.txt", std::ios::out);
-  std::cout << "\n- You are now editing user info -\nName of user whose data "
+  std::cout << "\n--- You are now editing user info ---\nName of user whose data "
                "you want to change\nName: ";
   std::string name;
-  std::cin >> name;
+  std::cin.ignore();
+  std::getline(std::cin,name);
   std::string first_name, last_name, money, id;
 
-  while (database >> first_name >> last_name >> money >> id) {
+  while ( std::getline(database,first_name) ) {
+    std::getline(database, last_name);
+    std::getline(database, money);
+    std::getline(database, id);
     if (name == first_name) {
+      std::cout << first_name << std::endl;
       int option;
       std::cout << "What do you want to change? " << std::endl;
-      std::cout << "\t1.Name\n\t2.Last name\n\t3.Money\n\t4.ID\n\t5.Delete user" << std::endl;
+      std::cout << "\t1.First Name\n\t2.Last Name\n\t3.Money\n\t4.ID\n\t5.Delete user" << std::endl;
       std::cout << "Enter option: ";
       std::cin >> option;
       switch (option) {
         case 1:
           std::cout << "Enter user new first name: ";
-          std::cin >> first_name;
-          temp_base << first_name << " " << last_name << " " << money << " "
+          std::cin.ignore();
+          std::getline(std::cin,first_name);
+          std::cout << first_name << std::endl;
+          temp_base << first_name << std::endl << last_name << std::endl << money << std::endl
                     << id << std::endl;
           break;
         case 2:
           std::cout << "Enter user new last name: ";
-          std::cin >> last_name;
-          temp_base << first_name << " " << last_name << " " << money << " "
+          std::cin.ignore();
+          std::getline(std::cin,last_name);
+          std::cout << last_name << std::endl;
+          temp_base << first_name << std::endl << last_name << std::endl << money << std::endl
                     << id << std::endl;
           break;
         case 3:
           std::cout << "Enter user new money balance: ";
-          std::cin >> money;
-          temp_base << first_name << " " << last_name << " " << money << " "
+          std::cin.ignore();
+          std::getline(std::cin,money);
+          temp_base << first_name << std::endl << last_name << std::endl << money << std::endl
                     << id << std::endl;
           break;
         case 4:
           std::cout << "Enter user new id: ";
-          std::cin >> id;
-          temp_base << first_name << " " << last_name << " " << money << " "
+          std::cin.ignore();
+          std::getline(std::cin,id);
+          temp_base << first_name << std::endl << last_name << std::endl << money << std::endl
                     << id << std::endl;
           break;
         case 5: 
           std::cout << "Deleted" << std::endl;
           break;
       }
-    } else if (name != first_name) {
-      temp_base << first_name << " " << last_name << " " << money << " " << id << std::endl;
+    }else{
+      temp_base << first_name << std::endl << last_name << std::endl << money << std::endl <<id << std::endl;
     }
   }
   database.close();
   temp_base.close();
   database.open("database.txt", std::ios::out);
   temp_base.open("database2.txt", std::ios::in);
-  while (temp_base >> first_name >> last_name >> money >> id) {
-    database << first_name << " " << last_name << " " << money << " " << id
-             << std::endl;
+  while (std::getline(temp_base,first_name)){ 
+      std::getline(temp_base, last_name);
+      std::getline(temp_base, money);
+      std::getline(temp_base, id);
+      
+    database << first_name << std::endl << last_name << std::endl << money << std::endl << id << std::endl;
   }
   temp_base.close();
   database.close();
@@ -132,32 +152,13 @@ void print_all() {
   database.open("database.txt", std::ios::in);
   if (database.is_open()) {
     std::string f_name,l_name,money,id;
-    while (database >> f_name >> l_name >> money >> id) {
-      std::cout << "Name: " << f_name << " " << l_name << " \t| Money: " << money <<"$" <<  std::endl;
-      // std::cout << "Money: " << money << std::endl;
-      usleep(24000);
-    }
+    std::string temp;
+      while( std::getline(database, f_name) ){
+        std::getline(database, l_name);
+        std::getline(database, money);
+        std::getline(database, id);
+        std::cout << "Name: " << f_name << " " << l_name << " \tMoney: " << money <<"$" << "\tID: " << id << std::endl;
+      }
   }
   database.close();
 }
-// void Account::with_depo_amount(std::fstream& database){ std::cout << "Enter
-// ID of Account: ";
-//   std::string id;
-//   std::cin >> id;
-//   database.open("database.txt", std::ios::in);
-//   std::string user;
-//   int count{0};
-//   while(database >> user){
-//     if(user == id){
-//       std::cout << user << std::endl;
-//       count++;
-//       if(count == 2){
-//         throw std::string{"There is more than one users with that ID"};
-//       }
-//     }
-//   }
-//   std::cout << "Enter how much money you want to store: " << std::endl;
-//   double balance;
-//   std::cin >> balance;
-//
-// }
