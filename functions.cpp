@@ -16,8 +16,8 @@ void start(int& o) {
             << std::endl;
   std::cout << "Version 0.0.1\t |\nderva" << std::endl;
   std::cout << print_line << std::endl;
-  std::cout << std::endl;
-  std::cout << print_line << std::endl;
+  // std::cout << std::endl;
+  // std::cout << print_line << std::endl;
   std::cout << print_main << " MAIN  MENU " << print_main << std::endl;
   std::cout << print_line << std::endl;
   std::cout << std::endl;
